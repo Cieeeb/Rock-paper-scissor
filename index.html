@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 1rem;
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .game-title {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            grid-column: 1 / -1;
+            gap: 1rem;
+        }
+
+        .btn {
+            background-color: #3b82f6;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+        }
+
+        .btn img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+        }
+
+        .result-container {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 2rem;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            color: #4b5563;
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #6b7280;
+        }
+
+        .score-container span {
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animated {
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1 class="game-title">Rock Paper Scissors</h1>
+        <div class="button-container">
+            <button class="btn" id="rock">
+                <img src="rock.png" alt="Rock">
+            </button>
+            <button class="btn" id="paper">
+                <img src="paper.png" alt="Paper">
+            </button>
+            <button class="btn" id="scissors">
+                <img src="scissors.png" alt="Scissors">
+            </button>
+        </div>
+        <div class="result-container">
+            <p class="font-semibold">Your Choice: <span id="playerChoice"></span></p>
+            <p class="font-semibold">Computer's Choice: <span id="computerChoice"></span></p>
+            <div class="score-container">
+                <p>Your Score: <span id="playerScore">0</span></p>
+                <p>Computer Score: <span id="computerScore">0</span></p>
+            </div>
+            <p class="result-text animated" id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        let playerScore = 0;
+        let computerScore = 0;
+        const playerScoreDisplay = document.getElementById('playerScore');
+        const computerScoreDisplay = document.getElementById('computerScore');
+        const playerChoiceDisplay = document.getElementById('playerChoice');
+        const computerChoiceDisplay = document.getElementById('computerChoice');
+        const buttons = document.querySelectorAll('.btn');
+        const choices = ['rock', 'paper', 'scissors'];
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const playerChoice = button.id;
+                const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+                playerChoiceDisplay.innerHTML = `<img src="${playerChoice}.png" alt="${playerChoice}" style="width: 50px;">`;
+                computerChoiceDisplay.innerHTML = `<img src="${computerChoice}.png" alt="${computerChoice}" style="width: 50px;">`;
+
+                const result = playRound(playerChoice, computerChoice);
+                document.getElementById('result').innerText = result;
+                playerScoreDisplay.textContent = playerScore;
+                computerScoreDisplay.textContent = computerScore;
+                document.getElementById('result').classList.add('animated');
+                setTimeout(() => {
+                    document.getElementById('result').classList.remove('animated');
+                }, 500);
+            });
+        });
+
+        function playRound(playerChoice, computerChoice) {
+            if (playerChoice === computerChoice) {
+                return "It's a tie!";
+            } else if (
+                (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                (playerChoice === 'paper' && computerChoice === 'rock') ||
+                (playerChoice === 'scissors' && computerChoice === 'paper')
+            ) {
+                playerScore++;
+                return 'You win!';
+            } else {
+                computerScore++;
+                return 'Computer wins!';
+            }
+        }
+    </script>
+</body>
+
+</html>
